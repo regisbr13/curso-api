@@ -1,4 +1,4 @@
-namespace MinhaApi.Controllers.Model
+namespace curso_api.Model
 {
     public class Person
     {

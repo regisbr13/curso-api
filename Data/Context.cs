@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using MinhaApi.Controllers.Model;
+using curso_api.Model;
 
-namespace MinhaApi.Controllers.Data
+namespace curso_api.Data
 {
     public class Context : DbContext
     {

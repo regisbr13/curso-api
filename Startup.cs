@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using curso_api.Business;
+using curso_api.Business.Interfaces;
+using curso_api.Data;
+using curso_api.Repository;
+using curso_api.Repository.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,9 +16,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using MinhaApi.Controllers.Data;
-using MinhaApi.Controllers.Model.Interfaces.Service;
-using MinhaApi.Controllers.Model.Service;
 
 namespace MinhaApi
 {
@@ -30,7 +32,8 @@ namespace MinhaApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddScoped<IPersonService, PersonService>();
+            services.AddScoped<IPersonRepository, PersonRepository>();
+            services.AddScoped<IPersonBusiness, PersonBusiness>();
             services.AddDbContext<Context>(options => options.UseMySql(Configuration.GetConnectionString("ConDb")));
         }
 
