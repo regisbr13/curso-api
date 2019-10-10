@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using curso_api.Business.Interfaces;
 using curso_api.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +10,9 @@ namespace curso_api.Controllers
     [ApiController]
     public class PersonsController : ControllerBase
     {
-        private readonly IPersonBusiness _personBusiness;
+        private readonly IBusiness<Person> _personBusiness;
 
-        public PersonsController(IPersonBusiness personBusiness) {
+        public PersonsController(IBusiness<Person> personBusiness) {
             _personBusiness = personBusiness;
         }
 

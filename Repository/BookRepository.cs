@@ -4,10 +4,10 @@ using curso_api.Repository.Interfaces;
 
 namespace curso_api.Repository
 {
-    public class PersonRepository : Repository<Person>, IPersonRepository
+    public class BookRepository : Repository<Book>, IBookRepository
     {
         private readonly Context _context;
 
-        public PersonRepository(Context context) : base(context){}
+        public BookRepository(Context context) : base(context){}
     }
 }
