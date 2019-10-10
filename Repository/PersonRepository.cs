@@ -35,7 +35,8 @@ namespace curso_api.Repository
                 await _context.Persons.AddAsync(person);
                 await _context.SaveChangesAsync();
                 return await FindByIdAsync(person.Id);
-            } catch(Exception ex) {
+            } 
+            catch(Exception ex) {
                 throw ex;
             }
         }
@@ -46,7 +47,8 @@ namespace curso_api.Repository
                 var person = await FindByIdAsync(id);
                 _context.Persons.Remove(person);
                 await _context.SaveChangesAsync();
-            } catch(Exception ex) {
+            } 
+            catch(Exception ex) {
                 throw ex;
             }
 
@@ -55,11 +57,13 @@ namespace curso_api.Repository
         public async Task<Person> UpdateAsync(Person person)
         {
             try {
-                var personUpdated = await FindByIdAsync(person.Id);
-                _context.Entry(personUpdated).CurrentValues.SetValues(person);
+                var updatedPerson = await FindByIdAsync(person.Id);
+                if(updatedPerson == null) return null;
+                _context.Entry(updatedPerson).CurrentValues.SetValues(person);
                 await _context.SaveChangesAsync();
                 return person;
-            } catch(Exception ex) {
+            } 
+            catch(Exception ex) {
                 throw ex;
             }
         }

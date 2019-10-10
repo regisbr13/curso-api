@@ -35,6 +35,7 @@ namespace MinhaApi
             services.AddScoped<IPersonRepository, PersonRepository>();
             services.AddScoped<IPersonBusiness, PersonBusiness>();
             services.AddDbContext<Context>(options => options.UseMySql(Configuration.GetConnectionString("ConDb")));
+            services.AddApiVersioning();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

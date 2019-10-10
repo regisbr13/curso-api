@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace curso_api.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1")]
+    [Route("api/[controller]/v{version:apiVersion}")]
     [ApiController]
     public class PersonsController : ControllerBase
     {
@@ -45,14 +46,11 @@ namespace curso_api.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(long id, [FromBody] Person person)
+        public async Task<IActionResult> Put([FromBody] Person person)
         {
-            var personUpdated = await _personBusiness.FindByIdAsync(id);
-            if(personUpdated == null) {
-                return NotFound();
-            }
-            if(id != person.Id)
-                return BadRequest("Id's não correspondem");
+            if(person == null) return BadRequest();
+            var updatedPerson = await _personBusiness.UpdateAsync(person);
+            if(updatedPerson == null) return BadRequest("A pessoa não consta na base de dados");
             return new ObjectResult(await _personBusiness.UpdateAsync(person));
         }
 
