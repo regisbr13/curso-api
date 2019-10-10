@@ -1,6 +1,9 @@
 ﻿using curso_api.Business;
 using curso_api.Business.Interfaces;
 using curso_api.Data;
+using curso_api.Data.VO;
+using curso_api.Data.VO.Converters;
+using curso_api.Data.VO.Converters.Interfaces;
 using curso_api.Model;
 using curso_api.Repository;
 using curso_api.Repository.Interfaces;
@@ -29,9 +32,10 @@ namespace MinhaApi
             services.AddDbContext<Context>(options => options.UseMySQL(Configuration.GetConnectionString("ConDb")));
             services.AddApiVersioning();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped(typeof(IBusiness<>), typeof(Business<>));
-            // services.AddScoped<IPersonRepository, PersonRepository>();
-            // services.AddScoped<IPersonBusiness, PersonBusiness>();
+            services.AddScoped<IBusiness<PersonVO>, PersonBusiness>();
+            services.AddScoped<IBusiness<BookVO>, BookBusiness>();
+            services.AddScoped<PersonConverter>();
+            services.AddScoped<BookConverter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

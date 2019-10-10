@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using curso_api.Business.Interfaces;
+using curso_api.Data.VO;
 using curso_api.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,11 +9,11 @@ namespace curso_api.Controllers
     [ApiVersion("1")]
     [Route("api/[controller]/v{version:apiVersion}")]
     [ApiController]
-    public class BooksController : Controller
+    public class BooksController : ControllerBase
     {
-        private readonly IBusiness<Book> _bookBusiness;
+        private readonly IBusiness<BookVO> _bookBusiness;
 
-        public BooksController(IBusiness<Book> bookBusiness) {
+        public BooksController(IBusiness<BookVO> bookBusiness) {
             _bookBusiness = bookBusiness;
         }
 
@@ -36,7 +37,7 @@ namespace curso_api.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Book book)
+        public async Task<IActionResult> Post([FromBody] BookVO book)
         {
             if(book == null)
                 return NotFound();
@@ -45,7 +46,7 @@ namespace curso_api.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromBody] Book book)
+        public async Task<IActionResult> Put([FromBody] BookVO book)
         {
             if(book == null) return BadRequest();
             var updatedPerson = await _bookBusiness.UpdateAsync(book);

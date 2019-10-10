@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using curso_api.Business.Interfaces;
+using curso_api.Data.VO;
 using curso_api.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +11,9 @@ namespace curso_api.Controllers
     [ApiController]
     public class PersonsController : ControllerBase
     {
-        private readonly IBusiness<Person> _personBusiness;
+        private readonly IBusiness<PersonVO> _personBusiness;
 
-        public PersonsController(IBusiness<Person> personBusiness) {
+        public PersonsController(IBusiness<PersonVO> personBusiness) {
             _personBusiness = personBusiness;
         }
 
@@ -36,7 +37,7 @@ namespace curso_api.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Person person)
+        public async Task<IActionResult> Post([FromBody] PersonVO person)
         {
             if(person == null)
                 return NotFound();
@@ -45,7 +46,7 @@ namespace curso_api.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromBody] Person person)
+        public async Task<IActionResult> Put([FromBody] PersonVO person)
         {
             if(person == null) return BadRequest();
             var updatedPerson = await _personBusiness.UpdateAsync(person);
