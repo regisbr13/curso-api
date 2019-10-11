@@ -4,6 +4,8 @@ using curso_api.Data.VO;
 using curso_api.Model;
 using Microsoft.AspNetCore.Mvc;
 using Tapioca.HATEOAS;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Collections.Generic;
 
 namespace curso_api.Controllers
 {
@@ -19,7 +21,11 @@ namespace curso_api.Controllers
         }
 
         // GET api/values
-        [HttpGet(Name = "GetPersons")]
+        [HttpGet]
+        [SwaggerResponse((200), Type = typeof(List<PersonVO>))]
+        [SwaggerResponse(204)]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(401)]
         [TypeFilter(typeof(HyperMediaFilter))]
         public async Task<ActionResult> Get()
         {
@@ -29,6 +35,11 @@ namespace curso_api.Controllers
 
         // GET api/values/5
         [HttpGet("{id}", Name = "GetPerson")]
+        [SwaggerResponse((200), Type = typeof(PersonVO))]
+        [SwaggerResponse(204)]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(401)]
+        [SwaggerResponse(404)]
         [TypeFilter(typeof(HyperMediaFilter))]
         public async Task<ActionResult> Get(long id)
         {
@@ -40,6 +51,9 @@ namespace curso_api.Controllers
 
         // POST api/values
         [HttpPost(Name = "CreatePerson")]
+        [SwaggerResponse((201), Type = typeof(PersonVO))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(401)]
         [TypeFilter(typeof(HyperMediaFilter))]
         public async Task<IActionResult> Post([FromBody] PersonVO person)
         {
@@ -50,6 +64,9 @@ namespace curso_api.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}", Name = "UpdatePerson")]
+        [SwaggerResponse((202), Type = typeof(PersonVO))]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(401)]
         [TypeFilter(typeof(HyperMediaFilter))]
         public async Task<IActionResult> Put([FromBody] PersonVO person)
         {
@@ -61,6 +78,9 @@ namespace curso_api.Controllers
 
         // DELETE api/values/5
         [HttpDelete("{id}", Name = "DeletePerson")]
+        [SwaggerResponse(204)]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(401)]
         [TypeFilter(typeof(HyperMediaFilter))]
         public async Task<IActionResult> Delete(int id)
         {

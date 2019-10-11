@@ -11,5 +11,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Xml" Version="2.2.0"/>
     <PackageReference Include="WebApiContrib.Core.Formatter.Csv" Version="3.0.0"/>
     <PackageReference Include="Tapioca.HATEOAS" Version="*"/>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="2.4.0"/>
   </ItemGroup>
 </Project>
