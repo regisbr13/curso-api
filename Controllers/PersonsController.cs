@@ -3,6 +3,7 @@ using curso_api.Business.Interfaces;
 using curso_api.Data.VO;
 using curso_api.Model;
 using Microsoft.AspNetCore.Mvc;
+using Tapioca.HATEOAS;
 
 namespace curso_api.Controllers
 {
@@ -18,7 +19,8 @@ namespace curso_api.Controllers
         }
 
         // GET api/values
-        [HttpGet]
+        [HttpGet(Name = "GetPersons")]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public async Task<ActionResult> Get()
         {
             var people = await _personBusiness.FindAllAsync();
@@ -26,7 +28,8 @@ namespace curso_api.Controllers
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetPerson")]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public async Task<ActionResult> Get(long id)
         {
             var person = await _personBusiness.FindByIdAsync(id);
@@ -36,7 +39,8 @@ namespace curso_api.Controllers
         }
 
         // POST api/values
-        [HttpPost]
+        [HttpPost(Name = "CreatePerson")]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public async Task<IActionResult> Post([FromBody] PersonVO person)
         {
             if(person == null)
@@ -45,7 +49,8 @@ namespace curso_api.Controllers
         }
 
         // PUT api/values/5
-        [HttpPut("{id}")]
+        [HttpPut("{id}", Name = "UpdatePerson")]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public async Task<IActionResult> Put([FromBody] PersonVO person)
         {
             if(person == null) return BadRequest();
@@ -55,7 +60,8 @@ namespace curso_api.Controllers
         }
 
         // DELETE api/values/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name = "DeletePerson")]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public async Task<IActionResult> Delete(int id)
         {
             var person = await _personBusiness.FindByIdAsync(id);

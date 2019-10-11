@@ -6,8 +6,6 @@ namespace curso_api.Repository
 {
     public class PersonRepository : Repository<Person>, IPersonRepository
     {
-        private readonly Context _context;
-
         public PersonRepository(Context context) : base(context){}
     }
 }

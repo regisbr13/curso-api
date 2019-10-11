@@ -4,6 +4,7 @@ using curso_api.Data;
 using curso_api.Data.VO;
 using curso_api.Data.VO.Converters;
 using curso_api.Data.VO.Converters.Interfaces;
+using curso_api.Hypermedia;
 using curso_api.Model;
 using curso_api.Repository;
 using curso_api.Repository.Interfaces;
@@ -14,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Net.Http.Headers;
+using Tapioca.HATEOAS;
 using WebApiContrib.Core.Formatter.Csv;
 
 namespace MinhaApi
@@ -44,6 +46,10 @@ namespace MinhaApi
             services.AddScoped<IBusiness<BookVO>, BookBusiness>();
             services.AddScoped<PersonConverter>();
             services.AddScoped<BookConverter>();
+            services.AddRouting();
+            var filterOptions = new HyperMediaFilterOptions();
+            filterOptions.ObjectContentResponseEnricherList.Add(new PersonEricher());
+            services.AddSingleton(filterOptions);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,9 +64,12 @@ namespace MinhaApi
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-            app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseMvc(routes => {
+                routes.MapRoute(
+                    name: "DefaultApi",
+                    template: "{controller=Values}/{id?}"
+                );
+            });
         }
     }
 }
