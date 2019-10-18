@@ -10,10 +10,10 @@ namespace curso_api.Business
 {
     public class PersonBusiness : IBusiness<PersonVO>
     {
-        private readonly IRepository<Person> _repository;
+        private readonly IPersonRepository _repository;
         private readonly PersonConverter _converter;
 
-        public PersonBusiness(IRepository<Person> repository, PersonConverter converter) {
+        public PersonBusiness(IPersonRepository repository, PersonConverter converter) {
             _repository = repository;
             _converter = converter;
         }
@@ -31,6 +31,11 @@ namespace curso_api.Business
         public async Task<PersonVO> FindByIdAsync(long id)
         {
             return _converter.Parse(await _repository.FindByIdAsync(id));
+        }
+
+        public async Task<List<PersonVO>> FindByName(string firstName, string lastName)
+        {
+            return _converter.ParseList(await _repository.FindByName(firstName, lastName));
         }
 
         public async Task<PersonVO> InsertAsync(PersonVO entity)

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Tapioca.HATEOAS;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
+using curso_api.Business;
 
 namespace curso_api.Controllers
 {
@@ -14,9 +15,9 @@ namespace curso_api.Controllers
     [ApiController]
     public class PersonsController : ControllerBase
     {
-        private readonly IBusiness<PersonVO> _personBusiness;
+        private readonly PersonBusiness _personBusiness;
 
-        public PersonsController(IBusiness<PersonVO> personBusiness) {
+        public PersonsController(PersonBusiness personBusiness) {
             _personBusiness = personBusiness;
         }
 
@@ -34,7 +35,7 @@ namespace curso_api.Controllers
         }
 
         // GET api/values/5
-        [HttpGet("{id}", Name = "GetPerson")]
+        [HttpGet("GetPerson/{id}", Name = "GetPerson")]
         [SwaggerResponse((200), Type = typeof(PersonVO))]
         [SwaggerResponse(204)]
         [SwaggerResponse(400)]
@@ -49,8 +50,22 @@ namespace curso_api.Controllers
             return Ok(person);
         }
 
+        // GET api/values/name
+        [HttpGet("GetPersonByName", Name = "GetPersonByName")]
+        [SwaggerResponse((200), Type = typeof(List<PersonVO>))]
+        [SwaggerResponse(204)]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(401)]
+        [SwaggerResponse(404)]
+        [TypeFilter(typeof(HyperMediaFilter))]
+        public async Task<ActionResult> Get([FromQuery] string firstName, [FromQuery] string lastName)
+        {
+            var people = await _personBusiness.FindByName(firstName, lastName);
+            return Ok(people);
+        }
+
         // POST api/values
-        [HttpPost(Name = "CreatePerson")]
+        [HttpPost("CreatePerson", Name = "CreatePerson")]
         [SwaggerResponse((201), Type = typeof(PersonVO))]
         [SwaggerResponse(400)]
         [SwaggerResponse(401)]
@@ -63,7 +78,7 @@ namespace curso_api.Controllers
         }
 
         // PUT api/values/5
-        [HttpPut("{id}", Name = "UpdatePerson")]
+        [HttpPut("UpdatePerson/{id}", Name = "UpdatePerson")]
         [SwaggerResponse((202), Type = typeof(PersonVO))]
         [SwaggerResponse(400)]
         [SwaggerResponse(401)]
@@ -77,7 +92,7 @@ namespace curso_api.Controllers
         }
 
         // DELETE api/values/5
-        [HttpDelete("{id}", Name = "DeletePerson")]
+        [HttpDelete("DeletePerson/{id}", Name = "DeletePerson")]
         [SwaggerResponse(204)]
         [SwaggerResponse(400)]
         [SwaggerResponse(401)]

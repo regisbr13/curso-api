@@ -19,6 +19,8 @@ namespace MinhaApi
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+            .UseUrls("http://10.0.0.2:5000")
                 .UseStartup<Startup>();
+
     }
 }

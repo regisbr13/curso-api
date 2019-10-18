@@ -1,4 +1,6 @@
-﻿using curso_api.Business;
+﻿using System.IO;
+using System.Linq;
+using curso_api.Business;
 using curso_api.Business.Interfaces;
 using curso_api.Data;
 using curso_api.Data.VO;
@@ -8,6 +10,7 @@ using curso_api.Hypermedia;
 using curso_api.Model;
 using curso_api.Repository;
 using curso_api.Repository.Interfaces;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -48,7 +51,8 @@ namespace MinhaApi
             services.AddSingleton(filterOptions);
             // DEPENDECY INJECTION
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped<IBusiness<PersonVO>, PersonBusiness>();
+            services.AddScoped<IPersonRepository, PersonRepository>();
+            services.AddScoped<PersonBusiness>();
             services.AddScoped<IBusiness<BookVO>, BookBusiness>();
             services.AddScoped<PersonConverter>();
             services.AddScoped<BookConverter>();
@@ -56,7 +60,10 @@ namespace MinhaApi
             // DOCUMENTATION
             services.AddSwaggerGen(x => {
                 x.SwaggerDoc("v1", new Info {Title = "RESTful API with ASP.NET Core", Version = "v1"});
+                x.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
             });
+
+            services.AddCors();
 
         }
 
@@ -76,6 +83,9 @@ namespace MinhaApi
             app.UseSwaggerUI(x => {
                 x.SwaggerEndpoint("/swagger/v1/swagger.json", "My API v1");
             });
+
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
 
             var option = new RewriteOptions();
             option.AddRedirect("^$", "swagger");
