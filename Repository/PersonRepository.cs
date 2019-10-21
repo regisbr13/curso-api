@@ -26,5 +26,25 @@ namespace curso_api.Repository
                 return await _context.Persons.Where(x => x.LastName.ToUpper().Contains(lastName.ToUpper())).ToListAsync();
             return await _context.Persons.ToListAsync();
         }
+
+        public async Task<List<Person>> FindWithPagedSearch(string query)
+        {
+            return await _context.Persons.FromSql<Person>(query).ToListAsync();
+        }
+
+        public int TotalResults(string query) 
+        {
+            var result = "";
+            using(var connection = _context.Database.GetDbConnection()) 
+            {
+                connection.Open();
+                using(var comand = connection.CreateCommand())
+                {
+                    comand.CommandText = query;
+                    result = comand.ExecuteScalar().ToString();
+                }
+            }
+            return int.Parse(result);
+        }
     }
 }

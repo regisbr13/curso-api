@@ -30,8 +30,8 @@ namespace curso_api.Controllers
         [TypeFilter(typeof(HyperMediaFilter))]
         public async Task<ActionResult> Get()
         {
-            var people = await _personBusiness.FindAllAsync();
-            return Ok(people);
+            var persons = await _personBusiness.FindAllAsync();
+            return Ok(persons);
         }
 
         // GET api/values/5
@@ -60,9 +60,24 @@ namespace curso_api.Controllers
         [TypeFilter(typeof(HyperMediaFilter))]
         public async Task<ActionResult> Get([FromQuery] string firstName, [FromQuery] string lastName)
         {
-            var people = await _personBusiness.FindByName(firstName, lastName);
-            return Ok(people);
+            var persons = await _personBusiness.FindByName(firstName, lastName);
+            return Ok(persons);
         }
+
+    // GET api/values/name
+        [HttpGet("GetPersonWithPagedSearch/{sortDirection}/{pageSize}/{page}", Name = "GetPersonWithPagedSearch")]
+        [SwaggerResponse((200), Type = typeof(List<PersonVO>))]
+        [SwaggerResponse(204)]
+        [SwaggerResponse(400)]
+        [SwaggerResponse(401)]
+        [SwaggerResponse(404)]
+        [TypeFilter(typeof(HyperMediaFilter))]
+        public async Task<ActionResult> Get([FromQuery] string name, string sortDirection, int pageSize, int page)
+        {
+            var persons = await _personBusiness.FindWithPagedSearch(name, sortDirection, pageSize, page);
+            return Ok(persons);
+        }
+
 
         // POST api/values
         [HttpPost("CreatePerson", Name = "CreatePerson")]
