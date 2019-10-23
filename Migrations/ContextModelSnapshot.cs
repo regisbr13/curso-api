@@ -18,7 +18,7 @@ namespace MinhaApi.Migrations
 
             modelBuilder.Entity("curso_api.Model.Book", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Author");

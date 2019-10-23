@@ -43,7 +43,7 @@ namespace MinhaApi
                 options.FormatterMappings.SetMediaTypeMappingForFormat("xml", MediaTypeHeaderValue.Parse("text/xml"));
                 options.FormatterMappings.SetMediaTypeMappingForFormat("json", MediaTypeHeaderValue.Parse("application/json"));
                 options.FormatterMappings.SetMediaTypeMappingForFormat("csv", MediaTypeHeaderValue.Parse("text/csv"));
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddXmlSerializerFormatters().AddCsvSerializerFormatters();
+            }).AddXmlSerializerFormatters().AddCsvSerializerFormatters();
             services.AddDbContext<Context>(options => options.UseMySQL(Configuration.GetConnectionString("ConDb")));
             services.AddApiVersioning();
             var filterOptions = new HyperMediaFilterOptions();

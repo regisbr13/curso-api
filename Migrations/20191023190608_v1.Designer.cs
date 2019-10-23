@@ -9,7 +9,7 @@ using curso_api.Data;
 namespace MinhaApi.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20191010122958_v1")]
+    [Migration("20191023190608_v1")]
     partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,7 +20,7 @@ namespace MinhaApi.Migrations
 
             modelBuilder.Entity("curso_api.Model.Book", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Author");
