@@ -7,12 +7,14 @@ using Tapioca.HATEOAS;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using curso_api.Business;
+using Microsoft.AspNetCore.Authorization;
 
 namespace curso_api.Controllers
 {
     [ApiVersion("1")]
     [Route("api/[controller]/v{version:apiVersion}")]
     [ApiController]
+    [Authorize("Bearer")]
     public class PersonsController : ControllerBase
     {
         private readonly PersonBusiness _personBusiness;

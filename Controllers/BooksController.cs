@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using curso_api.Business.Interfaces;
 using curso_api.Data.VO;
-using curso_api.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace curso_api.Controllers
@@ -9,6 +9,7 @@ namespace curso_api.Controllers
     [ApiVersion("1")]
     [Route("api/[controller]/v{version:apiVersion}")]
     [ApiController]
+    [Authorize("Bearer")]
     public class BooksController : ControllerBase
     {
         private readonly IBusiness<BookVO> _bookBusiness;

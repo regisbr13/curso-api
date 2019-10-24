@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using curso_api.Business;
 using curso_api.Business.Interfaces;
@@ -10,7 +11,10 @@ using curso_api.Hypermedia;
 using curso_api.Model;
 using curso_api.Repository;
 using curso_api.Repository.Interfaces;
+using curso_api.Security;
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +22,7 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Swashbuckle.AspNetCore.Swagger;
 using Tapioca.HATEOAS;
@@ -52,8 +57,10 @@ namespace MinhaApi
             // DEPENDECY INJECTION
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IPersonRepository, PersonRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<PersonBusiness>();
             services.AddScoped<IBusiness<BookVO>, BookBusiness>();
+            services.AddScoped<ILoginBusiness, LoginBusiness>();
             services.AddScoped<PersonConverter>();
             services.AddScoped<BookConverter>();
             services.AddRouting();
@@ -64,6 +71,38 @@ namespace MinhaApi
             });
 
             services.AddCors();
+            // SECURITY
+            var signingConfigurations = new SigningConfigurations();
+            services.AddSingleton(signingConfigurations);
+            
+            var tokenConfigurations = new TokenConfigurations();
+            new ConfigureFromConfigurationOptions<TokenConfigurations>(Configuration.GetSection("TokenConfigurations")).Configure(tokenConfigurations);
+            services.AddSingleton(tokenConfigurations);
+
+            services.AddAuthentication(options => 
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options => 
+            {
+                var paramsValidation = options.TokenValidationParameters;
+                paramsValidation.IssuerSigningKey = signingConfigurations.Key;
+                paramsValidation.ValidAudience = tokenConfigurations.Audience;
+                paramsValidation.ValidIssuer = tokenConfigurations.Issuer;
+                paramsValidation.ValidateIssuerSigningKey = true;
+                paramsValidation.ValidateLifetime = true;
+                paramsValidation.ClockSkew = TimeSpan.Zero;
+            });
+
+            services.AddAuthorization(options => 
+            {
+                options.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser().Build());
+            });
+
+
+
 
         }
 
